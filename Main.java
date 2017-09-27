@@ -175,14 +175,6 @@ public class Main {
         return key.equals("");
     }
 
-//System.out.println(readString);
-//if (readString.equals(""))
-//        System.out.println("Enter Key pressed.");
-//if (scanner.hasNextLine())
-//    readString = scanner.nextLine();
-//else
-//    readString = null;
-
     public static void printItr(String display, MenuIterator itr) {
         System.out.println(display);
         MenuItem item;
