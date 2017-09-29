@@ -2,10 +2,10 @@ package com.COSC436;
 
 public class MenuItem {
 
-    String name;
-    int category;
-    boolean heartHealthy;
-    double price;
+    private String name;
+    private int category;
+    private boolean heartHealthy;
+    private double price;
 
     public MenuItem(String name, int category, boolean heartHealthy, double price) {
         this.name = name;
