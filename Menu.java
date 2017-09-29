@@ -17,25 +17,17 @@ public class Menu {
 
     public void add(String name, int category, boolean heartHealthy, double price) {
         MenuItem newItem = new MenuItem(name, category, heartHealthy, price);
-        if (itemAmount >= items.length) {
+        if (itemAmount >= MAX_MENU_ITEMS) {
             System.err.println("ERROR: Menu has reached the max amount of items");
-        } else {
+        }
+        else {
             items[itemAmount] = newItem;
             itemAmount++;
         }
     }
 
     public void delete(MenuIterator itr) {
-        AllItemsIterator itemsIterator = (AllItemsIterator) itr;
-        int indexToDelete = itemsIterator.i - 1;
 
-        for (int i = indexToDelete; i < items.length - 1; i++) {
-            items[i] = items[i + 1];
-        }
-        if (items.length == MAX_MENU_ITEMS) {
-            items[items.length - 1] = null;
-        }
-        itemAmount--;
     }
 
     public MenuIterator getAllItemsIterator() {
@@ -83,7 +75,8 @@ public class Menu {
         public boolean filter() {
             if (items[i].getCategory() == category) {
                 return true;
-            } else {
+            }
+            else {
                 i++;
                 return hasNext();
             }
@@ -110,7 +103,8 @@ public class Menu {
         public boolean filter() {
             if (items[i].isHeartHealthy() == healthValue) {
                 return true;
-            } else {
+            }
+            else {
                 i++;
                 return hasNext();
             }
@@ -137,7 +131,8 @@ public class Menu {
         public boolean filter() {
             if (items[i].getPrice() <= priceThreshold) {
                 return true;
-            } else {
+            }
+            else {
                 i++;
                 return hasNext();
             }

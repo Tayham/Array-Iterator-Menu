@@ -20,19 +20,21 @@ public class Main {
         int category;
         boolean heartHealthy;
         double price;
+        double priceThreshold = 0.0;
 
         String menuPrompt = "1 – Display appetizers\n" + "2 – Display main dishes\n" + "3 – Display desserts\n" + "4 – Display heart healthy items\n" + "5 – Display items under a specified price\n" + "6 – Display all menu items\n" + "7 – Add menu item\n" + "8 – Remove menu item\n" + "0 – EXIT";
         String inputPrompt = "Please enter your option:";
         String allItems = "ALL MENU ITEMS";
-        String appDisplay = "APPETIZERS";
-        String heartHealthyDisplay = "ALL HEART HEALTHY MENU ITEMS";
-        String mainDishDisplay = "MAIN DISHES";
+        String appDisp = "APPETIZERS";
+        String heartHealthyDisp = "ALL HEART HEALTHY MENU ITEMS";
+        String mainDishDisp = "MAIN DISHES";
         String dessertItem = "ALL DESSERT MENU ITEMS";
+        String underPrice = "ALL ITEMS UNDER $" + priceThreshold;
 
-        String addItemName = "Input Item Name:";
+        String addItemName = "Input Item Name";
         String addItemCategory = "Input Item Category:\n" + "1 - Appetizers\n" + "2 - Main Dish\n" + "3 - Dessert";
         String addItemHeartHealth = "Is this item heart healthy? Y/N";
-        String addItemPrice = "How much does the item cost? (no $ sign)";
+        String addItemPrice = "How much does the item cost (no $ sign)";
 
         String maxPrice = "What is upper price threshold?";
         String deletePrompt = "Press [d] to delete item or [Enter] to continue";
@@ -48,14 +50,14 @@ public class Main {
                 case 1: //1 – Display appetizers
 
                     iterator = eatAtJoesMenu.getItemIterator(APPETIZERS);
-                    printItr(appDisplay, iterator);
+                    printItr(appDisp, iterator);
 
                     break;
 
                 case 2: //2 – Display main dishes
 
                     iterator = eatAtJoesMenu.getItemIterator(MAIN_DISH);
-                    printItr(mainDishDisplay, iterator);
+                    printItr(mainDishDisp, iterator);
 
                     break;
 
@@ -69,14 +71,13 @@ public class Main {
                 case 4: //4 – Display hearty healthy items
 
                     iterator = eatAtJoesMenu.getHeartHealthyIterator(HEART_HEALTHY);
-                    printItr(heartHealthyDisplay, iterator);
+                    printItr(heartHealthyDisp, iterator);
 
                     break;
 
                 case 5: //5 – Display items under a specified price
 
-                    double priceThreshold = getDouble(console, maxPrice);
-                    String underPrice = "ALL ITEMS UNDER $" + priceThreshold;
+                    priceThreshold = getDouble(console, maxPrice);
                     iterator = eatAtJoesMenu.getPriceIterator(priceThreshold);
                     printItr(underPrice, iterator);
 
@@ -91,7 +92,7 @@ public class Main {
 
                 case 7: //7 – Add menu item
 
-                    name = getStringLine(addItemName);
+                    name = getString(console, addItemName);
                     category = getIntRange(console, addItemCategory, 3, 1);
                     heartHealthy = twoOptions(console, addItemHeartHealth, "Y", "N");
                     price = getDouble(console, addItemPrice);
@@ -106,10 +107,10 @@ public class Main {
                     while (iterator.hasNext()) {
                         item = iterator.next();
                         System.out.println(item.getName() + " $" + item.getPrice());
-                        if (enterOptions(deletePrompt, "D"))
-                            System.out.println("Kept: " + item.getName() + "\n~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                        if (enterOptions(console, deletePrompt, "D"))
+                            System.out.println("Kept: " + item.getName());
                         else {
-                            System.out.println("Deleted: " + item.getName() + "\n~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                            System.out.println("Deleted: " + item.getName());
                             eatAtJoesMenu.delete(iterator);
                         }
                     }
@@ -121,16 +122,18 @@ public class Main {
 
                     break;
             }
-        } while (!exit);
+        } while (exit == false);
     }
 
-    private static String getStringLine(String prompt) {
-        Scanner input = new Scanner(System.in);
+    public static String getString(Scanner input, String prompt) {
         System.out.println(prompt);
-        return input.nextLine();
+        while (!input.hasNext()) {
+            input.next();//consume
+        }
+        return input.next();
     }
 
-    private static int getInt(Scanner input, String prompt) {
+    public static int getInt(Scanner input, String prompt) {
         System.out.println(prompt);
         while (!input.hasNextInt()) {
             input.next();//consume
@@ -140,7 +143,7 @@ public class Main {
         return input.nextInt();
     }
 
-    private static double getDouble(Scanner input, String prompt) {
+    public static double getDouble(Scanner input, String prompt) {
         System.out.println(prompt);
         while (!input.hasNextDouble()) {
             input.next();//consume
@@ -150,7 +153,7 @@ public class Main {
         return input.nextDouble();
     }
 
-    private static boolean twoOptions(Scanner input, String prompt, String yes, String no) {
+    public static boolean twoOptions(Scanner input, String prompt, String yes, String no) {
         System.out.println(prompt);
         String letter = input.next();
         while (!letter.equalsIgnoreCase(yes) && !letter.equalsIgnoreCase(no)) {
@@ -161,8 +164,7 @@ public class Main {
         return letter.equalsIgnoreCase(yes);
     }
 
-    private static boolean enterOptions(String prompt, String no) {
-        Scanner input = new Scanner(System.in);
+    public static boolean enterOptions(Scanner input, String prompt, String no) {
         System.out.println(prompt);
         String key = input.nextLine();
         while (!key.equals("") && !key.equalsIgnoreCase(no)) {
@@ -173,7 +175,7 @@ public class Main {
         return key.equals("");
     }
 
-    private static void printItr(String display, MenuIterator itr) {
+    public static void printItr(String display, MenuIterator itr) {
         System.out.println(display);
         MenuItem item;
         while (itr.hasNext()) {
@@ -182,7 +184,7 @@ public class Main {
         }
     }
 
-    private static int getIntRange(Scanner input, String prompt, int MAX, int LOW) {
+    public static int getIntRange(Scanner input, String prompt, int MAX, int LOW) {
         int x = getInt(input, prompt);
         while (x > MAX || x < LOW) {
 
@@ -192,7 +194,7 @@ public class Main {
         return x;
     }
 
-    private static int menu(String menuOptions, String inputPrompt, int min, int max) {
+    public static int menu(String menuOptions, String inputPrompt, int min, int max) {
         System.out.println("\nYour options are:\n-----------------");
         System.out.println(menuOptions);
         Scanner console = new Scanner(System.in);
